@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -14,13 +15,12 @@ class PostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'user_id' => 1,
-            'title' => fake()->sentence(),
-            'body' => fake()->paragraph(20)
-
-        ];
-    }
+    public function definition()
+{
+    return [
+        'user_id' => User::factory(), // This will create a user automatically
+        'title' => $this->faker->sentence,
+        'body' => $this->faker->paragraph,
+    ];
+}
 }
