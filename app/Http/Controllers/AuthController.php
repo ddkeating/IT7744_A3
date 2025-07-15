@@ -54,4 +54,25 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect('/');
     }
+
+    public function edit()
+    {
+        $user = auth()->user();
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update($request->only('username', 'email'));
+
+        return redirect()->route('dashboard')->with('success', 'Profile updated.');
+    }
+
 }

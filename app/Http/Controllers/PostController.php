@@ -32,7 +32,7 @@ class PostController extends Controller implements HasMiddleware
     {
         $request->validate([
             'title' => ['required', 'max:255',],
-            'body' => ['required', 'max:500'],
+            'body' => ['required'],
             'image' => ['nullable', 'file', 'max:3000', 'mimes:png,jpg,webp']
         ]);
 
@@ -77,14 +77,15 @@ class PostController extends Controller implements HasMiddleware
         // Checks the input and verify's it matches the given arguments.
         $request->validate([
             'title' => ['required', 'max:255'],
-            'body' => ['required', 'max:500'],
+            'body' => ['required'],
             'image' => ['nullable', 'file', 'max:3000', 'mimes:png,jpg,webp']
         ]);
 
-        if ($request->hasFile('image')){
-            Storage::disk('public')->delete($post->image);
-        }
-        $path = Storage::disk('public')->put('post_images', $request->image);
+        // Will store the image if the image is included in the request else will return null to use a default image for the post.
+        if ($request->hasFile('image')) {
+            $path = Storage::disk('public')->put('post_images', $request->image);
+        } else
+            $path = null;
 
         // Update the post
         $post->update([

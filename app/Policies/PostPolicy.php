@@ -8,9 +8,9 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy 
 {
-    // Checks if the user who created the post is the same given in the attribute and returns a bool if the user is the same.
+    // Checks if the user who created the post is the same given in the attribute or a admin and returns a bool if the user is the same.
     public function modify(User $user, Post $post): bool {
-        return $user->id === $post->user_id;
+        return $user->id === $post->user_id || $user->is_admin;
     }
 }
 
